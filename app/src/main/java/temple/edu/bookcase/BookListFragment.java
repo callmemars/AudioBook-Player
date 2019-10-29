@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -19,18 +20,18 @@ public class BookListFragment extends Fragment {
 
 
     ListView listView;
-    ArrayList bookArrayList;
+    ArrayList<String> bookArrayList;
     String[] bookKey;
     String[] bookListArray;
 
-    private OnFragmentInteractionListener mListener;
+    OnFragmentInteractionListener mListener;
 
     public BookListFragment() {
         // Required empty public constructor
     }
 
 
-    public static BookListFragment newInstance(ArrayList bookListKey) {
+    public static BookListFragment newInstance(ArrayList<String> bookListKey) {
         BookListFragment fragment = new BookListFragment();
         Bundle args = new Bundle();
         args.putStringArrayList("book_key", bookListKey);
@@ -50,17 +51,24 @@ public class BookListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_book_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_book_list, container, false);
+
+        bookAdapter adapter = new bookAdapter(getActivity(), bookArrayList);
+        listView = v.findViewById(R.id.fragListView);
+        listView.setAdapter(adapter);
+        //listAdapter = new ArrayAdapter<String>(this, R.layout.);
+
+
+        return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction("s");
         }
     }
-
+/*
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -71,7 +79,7 @@ public class BookListFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
+*/
     @Override
     public void onDetach() {
         super.onDetach();
@@ -80,7 +88,9 @@ public class BookListFragment extends Fragment {
 
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+
+        void onFragmentInteraction(String s);
     }
+
+
 }

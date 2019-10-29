@@ -2,8 +2,8 @@
     <string name="app_name">BookCase</string>
 
     <string-array name="books">
-        <item>You Can't Hurt Me</item>
-        <item>Ender's Game</item>
+        <item>You Cant Hurt Me</item>
+        <item>Enders Game</item>
         <item>Red Rising</item>
         <item>Models</item>
         <item>Subtle Art of Not Giving a F*CK</item>
