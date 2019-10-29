@@ -11,16 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 public class BookListFragment extends Fragment {
 
     //private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
+
 
     ListView listView;
-
-
-    //private String mParam1;
-    //private String mParam2;
+    ArrayList bookArrayList;
+    String[] bookKey;
+    String[] bookListArray;
 
     private OnFragmentInteractionListener mListener;
 
@@ -29,12 +30,12 @@ public class BookListFragment extends Fragment {
     }
 
 
-    public static BookListFragment newInstance(String param1, String param2) {
+    public static BookListFragment newInstance(ArrayList bookListKey) {
         BookListFragment fragment = new BookListFragment();
         Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
+        args.putStringArrayList("book_key", bookListKey);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -42,8 +43,7 @@ public class BookListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
+            bookArrayList = getArguments().getStringArrayList("book_key");
         }
     }
 
