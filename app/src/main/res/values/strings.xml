@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">BookCase</string>
+
+    <string-array name="books">
+        <item>You Can't Hurt Me</item>
+        <item>Ender's Game</item>
+        <item>Red Rising</item>
+        <item>Models</item>
+        <item>Subtle Art of Not Giving a F*CK</item>
+        <item>Lightning Thief</item>
+        <item>Flow</item>
+        <item>A Brief History of Time</item>
+        <item>How to Make Friends and Influence People</item>
+        <item>Intelligent Investor</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
