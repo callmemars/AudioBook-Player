@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -23,6 +24,11 @@ public class BookListFragment extends Fragment {
     ArrayList<String> bookArrayList;
     String[] bookKey;
     String[] bookListArray;
+
+
+
+    String title;
+    Boolean isFirstAccess = true;
 
     OnFragmentInteractionListener mListener;
 
@@ -58,6 +64,17 @@ public class BookListFragment extends Fragment {
         listView.setAdapter(adapter);
         //listAdapter = new ArrayAdapter<String>(this, R.layout.);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    title = listView.getItemAtPosition(position).toString();
+                    mListener.onFragmentInteraction(title);
+                }
+        }
+
+
+        );
+
 
         return v;
     }
@@ -68,7 +85,7 @@ public class BookListFragment extends Fragment {
             mListener.onFragmentInteraction("s");
         }
     }
-/*
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -79,7 +96,7 @@ public class BookListFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-*/
+
     @Override
     public void onDetach() {
         super.onDetach();

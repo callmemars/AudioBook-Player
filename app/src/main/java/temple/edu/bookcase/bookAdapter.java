@@ -57,7 +57,6 @@ public class bookAdapter extends BaseAdapter{
 
         textView.setTextSize(24);
 
-
         return textView;
     }
 }

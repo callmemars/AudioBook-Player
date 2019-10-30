@@ -4,11 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements BookListFragment.OnFragmentInteractionListener {
+
+    //Fragment fragdetail = BookDetailsFragment.newInstance("text");
+
+    BookDetailsFragment fragdetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +30,13 @@ public class MainActivity extends AppCompatActivity
         //Test code for listView
         Fragment frag = BookListFragment.newInstance(books);
 
+        fragdetail = new BookDetailsFragment();
+
+        Log.d("insidethis", "insidethis");
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.frag1, frag)
+                .add(R.id.frag2, fragdetail)
                 .commit();
 
 
@@ -35,6 +44,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(String s) {
-
+        fragdetail.displayBook(s);
+        Log.d("abcdefghij", s + " abcdefg");
+        Log.d("inside", "inside");
     }
 }
