@@ -14,11 +14,13 @@ public class MainActivity extends AppCompatActivity
     //Fragment fragdetail = BookDetailsFragment.newInstance("text");
 
     BookDetailsFragment fragdetail;
+    Boolean isHorizontal = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         String bookList[] = getResources().getStringArray(R.array.books);
         ArrayList books = new ArrayList<String>();
@@ -27,25 +29,31 @@ public class MainActivity extends AppCompatActivity
             books.add(bookList[i]);
         }
 
-        //Test code for listView
+        //Make listView
         Fragment frag = BookListFragment.newInstance(books);
-
         fragdetail = new BookDetailsFragment();
 
-        Log.d("insidethis", "insidethis");
+        //Check the paniage:
+        isHorizontal = findViewById(R.id.frag2) != null;
+
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.frag1, frag)
-                .add(R.id.frag2, fragdetail)
+                .replace(R.id.frag1, frag)
                 .commit();
 
+        if(isHorizontal){
+            Log.d("jamjam", "slim jim");
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.frag2, fragdetail)
+                    .commit();
+        }
 
     }
 
     @Override
     public void onFragmentInteraction(String s) {
         fragdetail.displayBook(s);
-        Log.d("abcdefghij", s + " abcdefg");
-        Log.d("inside", "inside");
     }
 }

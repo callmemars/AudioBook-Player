@@ -52,8 +52,10 @@ public class BookDetailsFragment extends Fragment {
 
     public void displayBook(String book){
 
-        textView.setText(book);
-        textView.setTextSize(33);
+        if (textView != null) {
+            textView.setText(book);
+            textView.setTextSize(33);
+        }
     }
 
     @Override
