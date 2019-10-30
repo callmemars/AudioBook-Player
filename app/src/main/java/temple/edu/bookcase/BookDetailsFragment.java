@@ -52,10 +52,10 @@ public class BookDetailsFragment extends Fragment {
 
     public void displayBook(String book){
 
-        if (textView != null) {
+        //if (textView != null) {
             textView.setText(book);
             textView.setTextSize(33);
-        }
+        //}
     }
 
     @Override
@@ -65,10 +65,6 @@ public class BookDetailsFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_book_details, container, false);
             textView = (TextView) v.findViewById(R.id.title);
-
-            //if(!(isEmpty(bookTitle))) {
-                //displayBook(bookTitle);
-            //}
         return v;
 
     }
