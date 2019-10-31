@@ -18,14 +18,10 @@ import java.util.ArrayList;
 public class BookListFragment extends Fragment {
 
     //private static final String ARG_PARAM1 = "param1";
-
-
     ListView listView;
     ArrayList<String> bookArrayList;
     String[] bookKey;
     String[] bookListArray;
-
-
 
     String title;
     Boolean isFirstAccess = true;
