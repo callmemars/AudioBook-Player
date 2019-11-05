@@ -28,10 +28,11 @@ public class BookDetailsFragment extends Fragment {
     String bookTitle;
     TextView textView;
 
+
     public BookDetailsFragment() {
         // Required empty public constructor
     }
-
+/*
     public static BookDetailsFragment newInstance(String bookTitle) {
         BookDetailsFragment fragment = new BookDetailsFragment();
         Bundle args = new Bundle();
@@ -39,22 +40,29 @@ public class BookDetailsFragment extends Fragment {
         fragment.setArguments(args);
 
         return fragment;
-    }
 
+
+ */
+    public static BookDetailsFragment newInstance(String x) {
+        BookDetailsFragment fragment = new BookDetailsFragment();
+        Bundle args = new Bundle();
+        args.putString("bookKey", x);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            bookTitle = getArguments().getString("bookKey");
-
+            bookTitle= getArguments().getString("bookKey");
         }
     }
 
-    public void displayBook(String book){
+    public void displayBook(String x){
 
         if (textView != null) {
-            textView.setText(book);
-            textView.setTextSize(33);
+            textView.setText(x);
         }
     }
 
@@ -64,7 +72,13 @@ public class BookDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.fragment_book_details, container, false);
-            textView = (TextView) v.findViewById(R.id.title);
+
+        textView = (TextView) v.findViewById(R.id.title);
+        textView.setTextSize(33);
+
+        if (bookTitle != null) {
+            displayBook(bookTitle);
+        }
         return v;
 
     }

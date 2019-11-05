@@ -2,11 +2,8 @@ package temple.edu.bookcase;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,21 +32,28 @@ public class MainActivity extends AppCompatActivity
         Fragment frag = BookListFragment.newInstance(books);
         fragdetail = new BookDetailsFragment();
 
+        ViewPagerFragment bf = ViewPagerFragment.newInstance(books);
+
         if(twoPane) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.frag1, frag)
+
+                    .remove(bf)
+
+                    .replace(R.id.frag1, frag)
                     .add(R.id.frag2, fragdetail)
                     .commitNow();
         }
+        else{
+            getSupportFragmentManager()
+                    .beginTransaction()
 
-
-
+                    .replace(R.id.frag1, bf)
+                    .commitNow();
+        }
     }
-
-
     @Override
-    public void onFragmentInteraction(String s) {
-        fragdetail.displayBook(s);
+    public void onFragmentInteraction(String x) {
+        fragdetail.displayBook(x);
     }
 }

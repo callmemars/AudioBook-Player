@@ -63,23 +63,12 @@ public class BookListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    title = listView.getItemAtPosition(position).toString();
-                    mListener.onFragmentInteraction(title);
+                    //title = listView.getItemAtPosition(position).toString();
+                    mListener.onFragmentInteraction(bookArrayList.get(position));
                 }
         }
-
-
         );
-
-
         return v;
-    }
-
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction("s");
-        }
     }
 
     @Override
@@ -102,7 +91,7 @@ public class BookListFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
 
-        void onFragmentInteraction(String s);
+        void onFragmentInteraction(String x);
     }
 
 
