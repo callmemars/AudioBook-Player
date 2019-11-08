@@ -20,9 +20,15 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     }
 
+    @NonNull
     public Fragment getItem(int position){
             return BookDetailsFragment.newInstance(bookList.get(position));
     }
+
+    // added for safety
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+         return PagerAdapter.POSITION_NONE;}
 
     @Override
     public int getCount() {

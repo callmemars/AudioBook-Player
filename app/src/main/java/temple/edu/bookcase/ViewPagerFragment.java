@@ -21,18 +21,17 @@ public class ViewPagerFragment extends Fragment {
 
 
     ViewPager pager;
-    ArrayList<String> bookArrayList;
+    ArrayList<Book> bookArrayList;
 
     public ViewPagerFragment() {
         // Required empty public constructor
     }
 
 
-
-    public static ViewPagerFragment newInstance(ArrayList<String> bookListKey) {
+    public static ViewPagerFragment newInstance(ArrayList<Book> bookListKey) {
         ViewPagerFragment fragment = new ViewPagerFragment();
         Bundle args = new Bundle();
-        args.putStringArrayList("book_key", bookListKey);
+        args.putParcelableArrayList("book_key", bookListKey);
         fragment.setArguments(args);
 
         return fragment;
@@ -56,7 +55,7 @@ public class ViewPagerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            bookArrayList = getArguments().getStringArrayList("book_key");
+            bookArrayList = getArguments().getParcelableArrayList("book_key");
         }
     }
 

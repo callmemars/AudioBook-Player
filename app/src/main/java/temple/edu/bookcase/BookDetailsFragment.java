@@ -40,7 +40,7 @@ public class BookDetailsFragment extends Fragment {
     public static BookDetailsFragment newInstance(Book x) {
         BookDetailsFragment fragment = new BookDetailsFragment();
         Bundle args = new Bundle();
-        args.putSerializable("bookKey", x);
+        args.putParcelable("bookKey", x);
         fragment.setArguments(args);
 
         return fragment;
@@ -50,15 +50,15 @@ public class BookDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             //bookTitle= getArguments().getString("bookKey");
-            book = (Book)getArguments().getSerializable("bookKey");
+            book = (Book)getArguments().getParcelable("bookKey");
             bookTitle = book.getTitle();
         }
     }
 
-    public void displayBook(String x){
+    public void displayBook(Book x){
 
         if (textView != null) {
-            textView.setText(x);
+            textView.setText(x.getTitle());
         }
     }
 
@@ -73,7 +73,7 @@ public class BookDetailsFragment extends Fragment {
         textView.setTextSize(33);
 
         if (bookTitle != null) {
-            displayBook(bookTitle);
+            displayBook(book);
         }
         return v;
 

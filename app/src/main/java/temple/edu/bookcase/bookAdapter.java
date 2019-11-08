@@ -16,16 +16,16 @@ public class bookAdapter extends BaseAdapter{
 
 
     Context context;
-    ArrayList<String> colors;
+    ArrayList<Book> colors;
     String displayColors[];
 
     // The native language colors
     //String ogColors[];
 
-    public bookAdapter(Context context, ArrayList<String> colors)
+    public bookAdapter(Context context, ArrayList<Book> books)
     {
         this.context = context;
-        this.colors = colors;
+        this.colors = books;
         //this.displayColors = context.getResources().getStringArray(R.array.books);
     }
 
@@ -51,9 +51,9 @@ public class bookAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView textView = new TextView(context);
-        String colorValue = colors.get(position);
+        Book colorValue = colors.get(position);
 
-        textView.setText(colorValue);
+        textView.setText(colorValue.getTitle());
 
         textView.setTextSize(24);
 

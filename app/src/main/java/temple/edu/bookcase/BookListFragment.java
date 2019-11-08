@@ -19,7 +19,7 @@ public class BookListFragment extends Fragment {
 
     //private static final String ARG_PARAM1 = "param1";
     ListView listView;
-    ArrayList<String> bookArrayList;
+    ArrayList<Book> bookArrayList;
     String[] bookKey;
     String[] bookListArray;
 
@@ -33,10 +33,10 @@ public class BookListFragment extends Fragment {
     }
 
 
-    public static BookListFragment newInstance(ArrayList<String> bookListKey) {
+    public static BookListFragment newInstance(ArrayList<Book> bookListKey) {
         BookListFragment fragment = new BookListFragment();
         Bundle args = new Bundle();
-        args.putStringArrayList("book_key", bookListKey);
+        args.putParcelableArrayList("book_key", bookListKey);
         fragment.setArguments(args);
 
         return fragment;
@@ -46,7 +46,7 @@ public class BookListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            bookArrayList = getArguments().getStringArrayList("book_key");
+            bookArrayList = getArguments().getParcelableArrayList("book_key");
         }
     }
 
@@ -91,7 +91,7 @@ public class BookListFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
 
-        void onFragmentInteraction(String x);
+        void onFragmentInteraction(Book x);
     }
 
 
