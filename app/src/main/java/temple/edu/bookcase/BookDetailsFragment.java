@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.Serializable;
+
 import static android.text.TextUtils.isEmpty;
 
 
@@ -28,25 +30,17 @@ public class BookDetailsFragment extends Fragment {
     String bookTitle;
     TextView textView;
 
+    Book book;
+
 
     public BookDetailsFragment() {
         // Required empty public constructor
     }
-/*
-    public static BookDetailsFragment newInstance(String bookTitle) {
+
+    public static BookDetailsFragment newInstance(Book x) {
         BookDetailsFragment fragment = new BookDetailsFragment();
         Bundle args = new Bundle();
-        args.putString("bookKey", bookTitle);
-        fragment.setArguments(args);
-
-        return fragment;
-
-
- */
-    public static BookDetailsFragment newInstance(String x) {
-        BookDetailsFragment fragment = new BookDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString("bookKey", x);
+        args.putSerializable("bookKey", x);
         fragment.setArguments(args);
 
         return fragment;
@@ -55,7 +49,9 @@ public class BookDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            bookTitle= getArguments().getString("bookKey");
+            //bookTitle= getArguments().getString("bookKey");
+            book = (Book)getArguments().getSerializable("bookKey");
+            bookTitle = book.getTitle();
         }
     }
 

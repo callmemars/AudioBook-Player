@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
-    ArrayList<String> bookList;
+    ArrayList<Book> bookList;
 
-     public PagerAdapter(FragmentManager mgr, ArrayList<String>  b){
+     public PagerAdapter(FragmentManager mgr, ArrayList<Book>  b){
         super (mgr);
         this.bookList = b;
 
