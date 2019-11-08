@@ -1,9 +1,17 @@
 package temple.edu.bookcase;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,6 +22,31 @@ public class MainActivity extends AppCompatActivity
         implements BookListFragment.OnFragmentInteractionListener {
 
     BookDetailsFragment fragdetail;
+    ArrayList<Book> bookNames;
+
+    // Query code
+    TextView title;
+    String titleName;
+    Handler jSonHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            try {
+                title.setText("hey");
+                //JSONObject bookJS = new JSONObject(msg.obj.toString());
+                JSONArray jsArr = new JSONArray(msg.obj.toString());
+
+                for(int i =0; i< jsArr.length();i++) {
+                    Book b = new Book();
+                    b.setTitle();
+
+                    //title.setText(jsArr.getJSONObject(0).getString("book_id"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,25 +54,46 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         // Query code
+        title = findViewById(R.id.title);
+
+        Log.d("helpplease1234", "sup");
 
         new Thread() {
             @Override
             public void run() {
-
-
                 URL url = null;
                 try {
+                    Log.d("helpplease123", "inside");
                     url = new URL("https://kamorris.com/lab/audlib/booksearch.php");
+
+
+
                     BufferedReader reader = new BufferedReader(
                             new InputStreamReader(
                                     url.openStream()));
-                    String response = reader.readLine();
-                } catch (Exception e) {
+                    StringBuilder builder = new StringBuilder();
+                    String response;
 
+                    Log.d("helpplease123", "still inside");
+                    while((response = reader.readLine()) != null){
+                        builder.append(response);
+                    }
+
+
+                    Message msg = Message.obtain();
+                    msg.obj = builder.toString();
+                    Log.d("helpplease123", msg.obj.toString());
+
+
+                    jSonHandler.sendMessage(msg);
+
+                } catch (
+                        Exception e) {
+                    Log.d("helpplease123", "we dead");
                     e.printStackTrace();
                 }
             }
-        };
+        }.start();
 
 
         Boolean twoPane = (findViewById(R.id.frag2) != null);
