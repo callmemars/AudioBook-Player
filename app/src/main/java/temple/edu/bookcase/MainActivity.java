@@ -26,24 +26,21 @@ public class MainActivity extends AppCompatActivity
     ArrayList bookNames = new ArrayList<Book>();
 
 
-    // Query code
-    TextView title;
-    String titleName;
+
+
+    ViewPagerFragment bf;
+
     Handler jSonHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
             try {
-                //title.setText("hey");
-                //JSONObject bookJS = new JSONObject(msg.obj.toString());
                 JSONArray jsArr = new JSONArray(msg.obj.toString());
-
                 for(int i =0; i< jsArr.length();i++) {
-                    //Book b = new Book(jsArr.getJSONObject(0).getString("title"));
-
-                    //b.setTitle(jsArr.getJSONObject(0).getString("title"));
-                    //bookNames.add(b);
-                    //title.setText(jsArr.getJSONObject(0).getString("book_id"));
+                    Book b = new Book(jsArr.getJSONObject(i).getString("title"));
+                    bookNames.add(b);
+                    updateViewPager();
                 }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -69,8 +66,6 @@ public class MainActivity extends AppCompatActivity
                     Log.d("helpplease123", "inside");
                     url = new URL("https://kamorris.com/lab/audlib/booksearch.php");
 
-
-
                     BufferedReader reader = new BufferedReader(
                             new InputStreamReader(
                                     url.openStream()));
@@ -90,6 +85,7 @@ public class MainActivity extends AppCompatActivity
 
                     jSonHandler.sendMessage(msg);
 
+                    reader.close();
                 } catch (
                         Exception e) {
                     Log.d("helpplease123", "we dead");
@@ -98,40 +94,34 @@ public class MainActivity extends AppCompatActivity
             }
         }.start();
 
-         Book b = new Book("1");
-        Book c = new Book("2");
-        Book d = new Book("3");
-        //b.setTitle("book");
-        if (b!= null) {
-            bookNames.add(b);
-            bookNames.add(c);
-            bookNames.add(d);
-        }
-
-
         Boolean twoPane = (findViewById(R.id.frag2) != null);
+        //Book b = new Book(jsArr.getJSONObject(0).getString("title"));
+        //Book c = new Book(jsArr.getJSONObject(1).getString("title"));
+        //Book d = new Book(jsArr.getJSONObject(2).getString("title"));
 
-        //String bookList[] = getResources().getStringArray(R.array.books);
-        //ArrayList books = new ArrayList<String>();
-
-        /*
-        for (int i = 0; i < bookList.length - 1; i++) {
-            books.add(bookList[i]);
-        }
-*/
+        /* Manual viewpager test code
+        Book b = new Book("hey");
+        Book c = new Book("hey2");
+        Book d = new Book("hey3");
+        bookNames.add(b);
+        bookNames.add(c);
+        bookNames.add(d);
+    */
 
         //Make listView
-        Fragment frag = BookListFragment.newInstance(bookNames);
-        fragdetail = new BookDetailsFragment();
 
-        ViewPagerFragment bf = ViewPagerFragment.newInstance(bookNames);
+            Fragment frag = BookListFragment.newInstance(bookNames);
+            fragdetail = new BookDetailsFragment();
+
+
+        bf = ViewPagerFragment.newInstance(bookNames);
 
         if (twoPane) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .remove(bf)
                     .replace(R.id.frag1, frag)
-                    .add(R.id.frag2, fragdetail)
+                    .replace(R.id.frag2, fragdetail)
                     .commitNow();
         } else {
             getSupportFragmentManager()
@@ -145,6 +135,13 @@ public class MainActivity extends AppCompatActivity
         public void onFragmentInteraction (Book x){
             fragdetail.displayBook(x);
         }
+
+
+    public void updateViewPager (){
+        if (bf.pager != null)
+            bf.pager.getAdapter().notifyDataSetChanged();
+
+    }
 
 
 

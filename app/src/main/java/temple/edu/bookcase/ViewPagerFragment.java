@@ -21,7 +21,8 @@ public class ViewPagerFragment extends Fragment {
 
 
     ViewPager pager;
-    ArrayList<Book> bookArrayList;
+    //ArrayList<Book> bookArrayList;
+    ArrayList<Book> bookArrayList = new ArrayList<Book>();
 
     public ViewPagerFragment() {
         // Required empty public constructor
@@ -46,7 +47,12 @@ public class ViewPagerFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_blank, container, false);
         pager = (ViewPager) v.findViewById(R.id.pager);
 
+        if(pager.getAdapter() != null){
+            pager.getAdapter().notifyDataSetChanged();
+
+        }
         pager.setAdapter(buildAdapter());
+
 
         return v;
     }
@@ -59,9 +65,16 @@ public class ViewPagerFragment extends Fragment {
         }
     }
 
+
+    public void updateViewPager(){
+        //bookArrayList = b;
+        pager.getAdapter().notifyDataSetChanged();
+    }
+
     private PagerAdapter buildAdapter() {
         PagerAdapter p = new temple.edu.bookcase.PagerAdapter(getChildFragmentManager(), bookArrayList);
         return (p);
     }
+
 
 }

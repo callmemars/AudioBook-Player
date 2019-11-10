@@ -16,7 +16,9 @@ public class bookAdapter extends BaseAdapter{
 
 
     Context context;
-    ArrayList<Book> colors;
+    //ArrayList<Book> colors;
+    //ArrayList colors = new ArrayList<Book>();
+    ArrayList<Book> colors = new ArrayList<Book>();
     String displayColors[];
 
     // The native language colors
@@ -39,7 +41,7 @@ public class bookAdapter extends BaseAdapter{
     @Override
     public Object getItem(int position) {
 
-        return colors.get(position);
+        return colors.get(position).getTitle();
     }
 
     @Override

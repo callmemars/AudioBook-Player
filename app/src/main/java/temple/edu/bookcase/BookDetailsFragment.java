@@ -60,6 +60,8 @@ public class BookDetailsFragment extends Fragment {
         if (textView != null) {
             textView.setText(x.getTitle());
         }
+        else
+            textView.setText("null");
     }
 
     @Override

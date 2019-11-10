@@ -12,12 +12,19 @@ import java.util.ArrayList;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
-    ArrayList<Book> bookList;
+    //ArrayList<Book> bookList;
+    ArrayList<Book> bookList = new ArrayList<Book>();
+   //ArrayList bookNames = new ArrayList<Book>();
 
      public PagerAdapter(FragmentManager mgr, ArrayList<Book>  b){
         super (mgr);
         this.bookList = b;
 
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
     }
 
     @NonNull
@@ -28,7 +35,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     // added for safety
     @Override
     public int getItemPosition(@NonNull Object object) {
-         return PagerAdapter.POSITION_NONE;}
+        return PagerAdapter.POSITION_NONE;}
 
     @Override
     public int getCount() {
