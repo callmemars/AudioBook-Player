@@ -58,7 +58,8 @@ public class BookDetailsFragment extends Fragment {
     public void displayBook(Book x){
 
         if (textView != null) {
-            textView.setText(x.getTitle());
+            textView.setText(x.getTitle() + " - " + x.getAuthor() + " (" + x.getPublished()
+            + ")");
         }
         else
             textView.setText("null");
@@ -72,7 +73,7 @@ public class BookDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_book_details, container, false);
 
         textView = (TextView) v.findViewById(R.id.title);
-        textView.setTextSize(33);
+        textView.setTextSize(20);
 
         if (bookTitle != null) {
             displayBook(book);

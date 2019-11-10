@@ -25,9 +25,6 @@ public class MainActivity extends AppCompatActivity
     //ArrayList<Book> bookNames;
     ArrayList bookNames = new ArrayList<Book>();
 
-
-
-
     ViewPagerFragment bf;
 
     Handler jSonHandler = new Handler(new Handler.Callback() {
@@ -37,6 +34,8 @@ public class MainActivity extends AppCompatActivity
                 JSONArray jsArr = new JSONArray(msg.obj.toString());
                 for(int i =0; i< jsArr.length();i++) {
                     Book b = new Book(jsArr.getJSONObject(i).getString("title"));
+                    b.setAuthor(jsArr.getJSONObject(i).getString("author"));
+                    b.setPublished(jsArr.getJSONObject(i).getInt("published"));
                     bookNames.add(b);
                     updateViewPager();
                 }
