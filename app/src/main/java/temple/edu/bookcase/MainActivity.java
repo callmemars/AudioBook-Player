@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity
                     Book b = new Book(jsArr.getJSONObject(i).getString("title"));
                     b.setAuthor(jsArr.getJSONObject(i).getString("author"));
                     b.setPublished(jsArr.getJSONObject(i).getString("published"));
+                    b.setCoverURL(jsArr.getJSONObject(i).getString("cover_url"));
                     bookNames.add(b);
                     updateViewPager();
                 }
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity
                         Log.d("hy", searchText + " searching..");
 
                         if (isAuthor) {
-                            for (int i = 0; i < bookNames.size() - 1; i++) {
+                            for (int i = 0; i < bookNames.size(); i++) {
 
                                 if (bookNames.get(i).getAuthor().equals(searchText)) {
                                     searchNames.add(bookNames.get(i));
@@ -193,14 +194,14 @@ public class MainActivity extends AppCompatActivity
                                 }
                             }
                         } else if (isYear) {
-                            for (int i = 0; i < bookNames.size() - 1; i++) {
+                            for (int i = 0; i < bookNames.size(); i++) {
 
                                 if (bookNames.get(i).getPublished().equals(searchText)) {
                                     searchNames.add(bookNames.get(i));
                                 }
                             }
                         } else if (isTitle) {
-                            for (int i = 0; i < bookNames.size() - 1; i++) {
+                            for (int i = 0; i < bookNames.size(); i++) {
 
                                 if (bookNames.get(i).getTitle().equals(searchText)) {
                                     searchNames.add(bookNames.get(i));
@@ -228,7 +229,7 @@ public class MainActivity extends AppCompatActivity
         if (bf.pager != null)
             bf.pager.getAdapter().notifyDataSetChanged();
     }
-    
+
     public void onRadioButtonClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
