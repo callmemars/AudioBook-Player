@@ -14,19 +14,8 @@ import java.io.Serializable;
 
 import static android.text.TextUtils.isEmpty;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BookDetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class BookDetailsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
-
-    // TODO: Rename and change types of parameters
-    //private String mParam1;
     String bookTitle;
     TextView textView;
 
@@ -34,7 +23,6 @@ public class BookDetailsFragment extends Fragment {
 
 
     public BookDetailsFragment() {
-        // Required empty public constructor
     }
 
     public static BookDetailsFragment newInstance(Book x) {

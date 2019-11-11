@@ -9,23 +9,15 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ViewPagerFragment extends Fragment {
 
 
     ViewPager pager;
-    //ArrayList<Book> bookArrayList;
     ArrayList<Book> bookArrayList = new ArrayList<Book>();
 
     public ViewPagerFragment() {
-        // Required empty public constructor
     }
 
 
@@ -49,11 +41,8 @@ public class ViewPagerFragment extends Fragment {
 
         if(pager.getAdapter() != null){
             pager.getAdapter().notifyDataSetChanged();
-
         }
         pager.setAdapter(buildAdapter());
-
-
         return v;
     }
 
@@ -65,10 +54,8 @@ public class ViewPagerFragment extends Fragment {
         }
     }
 
-
-    public void updateViewPager(){
-        //bookArrayList = b;
-        pager.getAdapter().notifyDataSetChanged();
+    public ArrayList<Book> getCurrentList(){
+        return this.bookArrayList;
     }
 
     private PagerAdapter buildAdapter() {

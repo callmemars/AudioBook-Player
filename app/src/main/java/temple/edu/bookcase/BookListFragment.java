@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +18,11 @@ import java.util.ArrayList;
 
 public class BookListFragment extends Fragment {
 
-    //private static final String ARG_PARAM1 = "param1";
     ListView listView;
     ArrayList<Book> bookArrayList;
-    String[] bookKey;
-    String[] bookListArray;
-
-    String title;
-    Boolean isFirstAccess = true;
-
     OnFragmentInteractionListener mListener;
 
     public BookListFragment() {
-        // Required empty public constructor
     }
 
 
@@ -58,12 +51,11 @@ public class BookListFragment extends Fragment {
         bookAdapter adapter = new bookAdapter(getActivity(), bookArrayList);
         listView = v.findViewById(R.id.fragListView);
         listView.setAdapter(adapter);
-        //listAdapter = new ArrayAdapter<String>(this, R.layout.);
 
+        // Returns what was clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //title = listView.getItemAtPosition(position).toString();
                     mListener.onFragmentInteraction(bookArrayList.get(position));
                 }
         }
@@ -84,15 +76,20 @@ public class BookListFragment extends Fragment {
 
     @Override
     public void onDetach() {
+
+        Log.d("hey", "disconnected");
         super.onDetach();
+
         mListener = null;
     }
 
 
     public interface OnFragmentInteractionListener {
-
         void onFragmentInteraction(Book x);
     }
 
+    public ArrayList<Book> getCurrentList(){
+        return this.bookArrayList;
+    }
 
 }
