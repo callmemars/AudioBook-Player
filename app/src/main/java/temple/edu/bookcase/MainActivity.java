@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity
                     .commitNow();
         }
 */
+
         changeFragments(bookNames);
 
         // Search function

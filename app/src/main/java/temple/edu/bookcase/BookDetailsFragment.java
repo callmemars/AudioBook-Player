@@ -3,12 +3,16 @@ package temple.edu.bookcase;
 
 import android.os.Bundle;
 
+import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 
@@ -18,6 +22,7 @@ public class BookDetailsFragment extends Fragment {
 
     String bookTitle;
     TextView textView;
+    ImageView bookImage;
 
     Book book;
 
@@ -31,13 +36,13 @@ public class BookDetailsFragment extends Fragment {
         args.putParcelable("bookKey", x);
         fragment.setArguments(args);
 
+
         return fragment;
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            //bookTitle= getArguments().getString("bookKey");
             book = (Book)getArguments().getParcelable("bookKey");
             bookTitle = book.getTitle();
         }
@@ -51,6 +56,8 @@ public class BookDetailsFragment extends Fragment {
         }
         else
             textView.setText("null");
+
+        Picasso.get().load(x.coverURL).into(bookImage);
     }
 
     @Override
@@ -60,7 +67,10 @@ public class BookDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_book_details, container, false);
 
         textView = (TextView) v.findViewById(R.id.title);
+        bookImage = v.findViewById(R.id.image);
+
         textView.setTextSize(20);
+
 
         if (bookTitle != null) {
             displayBook(book);
