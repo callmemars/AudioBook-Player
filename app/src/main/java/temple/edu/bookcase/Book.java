@@ -11,7 +11,7 @@ public class Book implements Parcelable {
     int book;
     String title;
     String author;
-    int published;
+    String published;
     String coverURL;
 
 
@@ -52,7 +52,7 @@ public class Book implements Parcelable {
         this.author = author;
     }
 
-    public void setPublished(int published) {
+    public void setPublished(String published) {
         this.published = published;
     }
 
@@ -73,7 +73,7 @@ public class Book implements Parcelable {
         return author;
     }
 
-    public int getPublished() {
+    public String getPublished() {
         return published;
     }
 
@@ -93,7 +93,7 @@ public class Book implements Parcelable {
         dest.writeInt(book);
         dest.writeString(title);
         dest.writeString(author);
-        dest.writeInt(published);
+        dest.writeString(published);
         dest.writeString(coverURL);
     }
 }
