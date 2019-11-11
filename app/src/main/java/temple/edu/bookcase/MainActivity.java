@@ -95,10 +95,11 @@ public class MainActivity extends AppCompatActivity
             if (vpFrag != null) {
                 bookNames = vpFrag.getCurrentList();
             }
-        } else if (f1 instanceof BookDetailsFragment) {
+        } else if (f1 instanceof BookListFragment) {
             bfFrag = (BookListFragment) fm.findFragmentById(R.id.frag1);
             if (bfFrag != null) {
                 bookNames = bfFrag.getCurrentList();
+
             }
 
         }
@@ -182,11 +183,11 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
 
+                    Log.d("hy", searchText + " searching for <");
+
                     if (search.getText().toString() != "") {
                         searchNames.clear();
                         searchText = search.getText().toString();
-
-                        Log.d("hy", searchText + " searching..");
 
                         if (isAuthor) {
                             for (int i = 0; i < bookNames.size(); i++) {
@@ -233,6 +234,7 @@ public class MainActivity extends AppCompatActivity
             bf.pager.getAdapter().notifyDataSetChanged();
     }
 
+    // To see if the user is searching for the title, author, or year published.
     public void onRadioButtonClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
