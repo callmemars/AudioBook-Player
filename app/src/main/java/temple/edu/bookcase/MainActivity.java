@@ -6,8 +6,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +31,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 
+import edu.temple.audiobookplayer.AudiobookService;
+
 public class MainActivity extends AppCompatActivity
         implements BookListFragment.OnFragmentInteractionListener {
 
@@ -40,7 +47,12 @@ public class MainActivity extends AppCompatActivity
     Fragment frag;
     EditText search;
     String searchText = "";
+
     Button button;
+
+    Button playButton;
+    Binder binder;
+    AudiobookService.MediaControlBinder servBinder;
 
     Boolean isTitle = false;
     Boolean isAuthor = false;
@@ -48,7 +60,38 @@ public class MainActivity extends AppCompatActivity
     RadioButton title;
     RadioButton author;
 
+    ServiceConnection sv = new ServiceConnection() {
 
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            servBinder = (AudiobookService.MediaControlBinder) service;
+            servBinder.setProgressHandler(seekHandler);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+    Handler seekHandler = new Handler(new Handler.Callback(){
+
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+
+
+            //AudiobookService.BookProgress
+
+
+            return false;
+        }
+    });
+
+
+
+
+
+            // Gets the book data
     Handler jSonHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
@@ -79,7 +122,10 @@ public class MainActivity extends AppCompatActivity
 
         // Search Ids
         search = findViewById(R.id.searchText);
+
         button = findViewById((R.id.button));
+
+
         title = findViewById(R.id.titleRadio);
         author = findViewById(R.id.author);
 
@@ -141,42 +187,22 @@ public class MainActivity extends AppCompatActivity
                 }
             }.start();
         }
-
-
-        //Manual book test code
-        /*
-        Book b = new Book("hey");
-        Book c = new Book("hey2");
-        Book d = new Book("hey3");
-        bookNames.add(b);
-        bookNames.add(c);
-        bookNames.add(d);
-*/
-        //Make listView
-        /* Put this into a method
-        frag = BookListFragment.newInstance(bookNames);
-        fragdetail = new BookDetailsFragment();
-
-        bf = ViewPagerFragment.newInstance(bookNames);
-
-
-
-        if (twoPane) {
-            fm.beginTransaction()
-                    .replace(R.id.frag1, frag)
-                    .replace(R.id.frag2, fragdetail)
-                    .commitNow();
-        } else {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frag1, bf)
-                    .remove(fragdetail)
-                    .commitNow();
-        }
-*/
-
         changeFragments(bookNames);
 
+/*
+        if (playButton != null){
+            playButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AudiobookService s = new AudiobookService();
+
+
+                    Intent intent = new Intent(this, AudioBookService.class);
+                    bindService(intent, )
+                }
+        });
+        }
+*/
         // Search function
         if (button != null) {
             button.setOnClickListener(new View.OnClickListener() {
