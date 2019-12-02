@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -50,9 +51,12 @@ public class MainActivity extends AppCompatActivity
 
     Button button;
 
+    // Audiobook vars
     Button playButton;
     Binder binder;
     AudiobookService.MediaControlBinder servBinder;
+    SeekBar seekbar;
+    Boolean isConnected;
 
     Boolean isTitle = false;
     Boolean isAuthor = false;
@@ -64,13 +68,15 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            isConnected = true;
             servBinder = (AudiobookService.MediaControlBinder) service;
             servBinder.setProgressHandler(seekHandler);
+
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            isConnected = false;
         }
     };
 
@@ -79,10 +85,20 @@ public class MainActivity extends AppCompatActivity
         @Override
         public boolean handleMessage(@NonNull Message msg) {
 
+            if (msg.obj != null) {
+                seekbar = findViewById(R.id.seekBar);
 
-            //AudiobookService.BookProgress
+                if (seekbar != null) {
+                    AudiobookService.BookProgress bookSeek = (AudiobookService.BookProgress)msg.obj;
+
+                    if(isConnected){
+                        servBinder.stop();
+                    }
 
 
+                }
+
+            }
             return false;
         }
     });

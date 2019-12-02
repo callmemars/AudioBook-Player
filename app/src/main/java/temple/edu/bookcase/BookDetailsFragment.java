@@ -1,6 +1,7 @@
 package temple.edu.bookcase;
 
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.core.widget.ImageViewCompat;
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +25,10 @@ public class BookDetailsFragment extends Fragment {
     String bookTitle;
     TextView textView;
     ImageView bookImage;
+
+    // Audio book vars
+    OnBookPlay parentFrag;
+    Button playButton;
 
     Book book;
 
@@ -76,6 +82,29 @@ public class BookDetailsFragment extends Fragment {
             displayBook(book);
         }
         return v;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof BookDetailsFragment.OnBookPlay) {
+            parentFrag = (BookDetailsFragment.OnBookPlay) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnBookPlay interface");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        parentFrag = null;
+    }
+
+
+    public interface OnBookPlay {
+        void playBoo
     }
 
 }
