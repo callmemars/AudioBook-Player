@@ -14,6 +14,8 @@ public class Book implements Parcelable {
     String published;
     String coverURL;
 
+    int duration;
+
 
     public Book(Parcel in) {
         //book = in.readInt();
