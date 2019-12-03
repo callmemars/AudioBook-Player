@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import edu.temple.audiobookplayer.AudiobookService;
 
 public class MainActivity extends AppCompatActivity
-        implements BookListFragment.OnFragmentInteractionListener {
+        implements BookListFragment.OnFragmentInteractionListener, BookDetailsFragment.OnBookPlay {
 
     FragmentManager fm;
     BookDetailsFragment fragdetail;
@@ -53,10 +54,10 @@ public class MainActivity extends AppCompatActivity
 
     // Audiobook vars
     Button playButton;
-    Binder binder;
     AudiobookService.MediaControlBinder servBinder;
     SeekBar seekbar;
     Boolean isConnected;
+    Intent audioBook;
 
     Boolean isTitle = false;
     Boolean isAuthor = false;
@@ -76,7 +77,9 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            servBinder = null;
             isConnected = false;
+
         }
     };
 
@@ -92,14 +95,37 @@ public class MainActivity extends AppCompatActivity
                     AudiobookService.BookProgress bookSeek = (AudiobookService.BookProgress)msg.obj;
 
                     if(isConnected){
-                        servBinder.stop();
+                        //servBinder.stop();
+
+
+                        if (seekbar != null){
+                            seekbar.setProgress(1);
+                            seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+
+                                @Override
+                                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                                    if (fromUser && isConnected){
+                                        servBinder.seekTo(0);
+
+                                    }
+                                }
+
+                                @Override
+                                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                }
+
+                                @Override
+                                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                                }
+                            });
+                        }
                     }
-
-
                 }
-
             }
-            return false;
+            return true;
         }
     });
 
@@ -140,10 +166,12 @@ public class MainActivity extends AppCompatActivity
         search = findViewById(R.id.searchText);
 
         button = findViewById((R.id.button));
-
-
         title = findViewById(R.id.titleRadio);
         author = findViewById(R.id.author);
+        seekbar = findViewById(R.id.seekBar);
+
+        audioBook = new Intent(this, AudiobookService.class);
+        bindService(audioBook, sv, Context.BIND_AUTO_CREATE);
 
         // Gets fragment information after restart
         Fragment f1 = fm.findFragmentById(R.id.frag1);
@@ -167,6 +195,7 @@ public class MainActivity extends AppCompatActivity
         }
         // Check how many panes there are
          twoPane = (findViewById(R.id.frag2) != null);
+
 
         // Query code
         if (vpFrag == null && bfFrag == null) {
@@ -319,7 +348,14 @@ public class MainActivity extends AppCompatActivity
                     .remove(fragdetail)
                     .commitNow();
         }
-
     }
 
+    @Override
+    public void playBook(Book book){
+        startService(audioBook);
+
+        if(isConnected){
+            servBinder.play(0);
+        }
+    }
 }

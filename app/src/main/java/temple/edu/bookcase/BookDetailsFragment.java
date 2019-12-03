@@ -4,6 +4,8 @@ package temple.edu.bookcase;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
 
@@ -27,7 +29,7 @@ public class BookDetailsFragment extends Fragment {
     ImageView bookImage;
 
     // Audio book vars
-    OnBookPlay parentFrag;
+    private OnBookPlay parentFrag;
     Button playButton;
 
     Book book;
@@ -84,11 +86,33 @@ public class BookDetailsFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (book != null) {
+            displayBook(book);
+
+            playButton = getView().findViewById(R.id.playButton);
+
+            if (playButton != null) {
+                playButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        parentFrag.playBook(book);
+                    }
+
+                });
+            }
+
+        }
+
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof BookDetailsFragment.OnBookPlay) {
+        if ((context instanceof BookDetailsFragment.OnBookPlay)){
             parentFrag = (BookDetailsFragment.OnBookPlay) context;
         } else {
             throw new RuntimeException(context.toString()
@@ -104,7 +128,7 @@ public class BookDetailsFragment extends Fragment {
 
 
     public interface OnBookPlay {
-        void playBoo
+        void playBook(Book book);
     }
 
 }

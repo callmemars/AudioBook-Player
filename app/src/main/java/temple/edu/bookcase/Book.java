@@ -13,6 +13,7 @@ public class Book implements Parcelable {
     String author;
     String published;
     String coverURL;
+    int Id;
 
     int duration;
 
