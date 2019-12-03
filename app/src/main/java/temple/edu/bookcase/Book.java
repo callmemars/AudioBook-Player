@@ -103,7 +103,7 @@ public class Book implements Parcelable {
         dest.writeString(author);
         dest.writeString(published);
         dest.writeString(coverURL);
-        dest.writeInt(duration);
-        dest.writeInt(id);
+        //dest.writeInt(duration);
+        //dest.writeInt(id);
     }
 }

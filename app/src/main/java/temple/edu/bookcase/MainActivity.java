@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity
     Button button;
 
     // Audiobook vars
-    Button playButton;
     Button pauseButton;
+    Button stopButton;
 
     AudiobookService.MediaControlBinder servBinder;
     SeekBar seekbar;
@@ -170,8 +170,9 @@ public class MainActivity extends AppCompatActivity
                     b.setAuthor(jsArr.getJSONObject(i).getString("author"));
                     b.setPublished(jsArr.getJSONObject(i).getString("published"));
                     b.setCoverURL(jsArr.getJSONObject(i).getString("cover_url"));
-                    b.setId(jsArr.getJSONObject(i).getInt("id"));
+                    b.setId(jsArr.getJSONObject(i).getInt("book_id"));
                     b.setDuration(jsArr.getJSONObject(i).getInt("duration"));
+
                     bookNames.add(b);
                     updateViewPager();
                 }
@@ -198,6 +199,7 @@ public class MainActivity extends AppCompatActivity
         author = findViewById(R.id.author);
         seekbar = findViewById(R.id.seekBar);
         pauseButton = findViewById(R.id.pauseButton);
+        stopButton = findViewById(R.id.stopButton);
 
         seekbar.setProgress(MainActivity.currentProgress);
         seekbar.setMax(currentDuration);
@@ -326,6 +328,22 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+        stopButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                if(isConnected) {
+                    servBinder.stop();
+
+                    playing = false;
+                    paused = false;
+
+                    seekbar.setProgress(0);
+                    stopService(audioBook);
+                }
+            }
+        });
     }
 
         @Override
@@ -392,6 +410,8 @@ public class MainActivity extends AppCompatActivity
 
         if(isConnected){
             seekbar.setMax(book.getDuration());
+
+            currentDuration = book.getDuration();
 
             Log.d("did services", String.valueOf(book.getId()));
             servBinder.play(book.getId());
