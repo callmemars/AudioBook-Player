@@ -99,9 +99,8 @@ public class MainActivity extends AppCompatActivity
 
 
                         if (seekbar != null){
-                            seekbar.setProgress(1);
+                            seekbar.setProgress(0);
                             seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
 
                                 @Override
                                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -144,6 +143,7 @@ public class MainActivity extends AppCompatActivity
                     b.setAuthor(jsArr.getJSONObject(i).getString("author"));
                     b.setPublished(jsArr.getJSONObject(i).getString("published"));
                     b.setCoverURL(jsArr.getJSONObject(i).getString("cover_url"));
+                    //b.setId(jsArr.getJSONObject(i).getInt("id"));
                     bookNames.add(b);
                     updateViewPager();
                 }
@@ -355,7 +355,8 @@ public class MainActivity extends AppCompatActivity
         startService(audioBook);
 
         if(isConnected){
-            servBinder.play(0);
+            seekbar.setMax(book.getDuration());
+            servBinder.play(book.getId());
         }
     }
 }
