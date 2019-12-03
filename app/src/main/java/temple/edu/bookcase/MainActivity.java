@@ -103,29 +103,28 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public boolean handleMessage(@NonNull Message msg) {
-        Log.d("bannan", "ban");
+            Log.d("bannan", "ban");
             if (msg.obj != null) {
                 seekbar = findViewById(R.id.seekBar);
 
                 if (seekbar != null) {
-                    AudiobookService.BookProgress bookSeek = (AudiobookService.BookProgress)msg.obj;
+                    AudiobookService.BookProgress bookSeek = (AudiobookService.BookProgress) msg.obj;
                     Log.d("hey", "Progress is: " + String.valueOf(bookSeek.getProgress()));
 
-                    if(isConnected){
+                    if (isConnected) {
                         //servBinder.stop();
 
-                        if (seekbar != null &&(bookSeek.getProgress() < MainActivity.currentDuration)){
+                        if (seekbar != null && (bookSeek.getProgress() < MainActivity.currentDuration)) {
                             seekbar.setProgress(bookSeek.getProgress());
                             seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                                 @Override
                                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                                    if (fromUser && isConnected){
+                                    if (fromUser && isConnected) {
 
                                         servBinder.seekTo(progress);
                                         currentProgress = progress;
-                                    }
-                                    else{
+                                    } else {
                                         currentProgress = progress;
                                     }
                                 }
@@ -141,8 +140,16 @@ public class MainActivity extends AppCompatActivity
                                 }
                             });
                         }
+                    } else if (seekbar != null && (bookSeek.getProgress() == currentDuration)) {
+                        if (isConnected) {
+                            servBinder.stop(); // Stop the book, which changes the playingState in AudiobookService accordingly
+                            //Title = "";
+                            //currentTitleText.setText("");
+                            seekbar.setProgress(0);
+                        }
                     }
                 }
+
             }
             return true;
         }
@@ -163,7 +170,8 @@ public class MainActivity extends AppCompatActivity
                     b.setAuthor(jsArr.getJSONObject(i).getString("author"));
                     b.setPublished(jsArr.getJSONObject(i).getString("published"));
                     b.setCoverURL(jsArr.getJSONObject(i).getString("cover_url"));
-                    //b.setId(jsArr.getJSONObject(i).getInt("id"));
+                    b.setId(jsArr.getJSONObject(i).getInt("id"));
+                    b.setDuration(jsArr.getJSONObject(i).getInt("duration"));
                     bookNames.add(b);
                     updateViewPager();
                 }
@@ -190,6 +198,9 @@ public class MainActivity extends AppCompatActivity
         author = findViewById(R.id.author);
         seekbar = findViewById(R.id.seekBar);
         pauseButton = findViewById(R.id.pauseButton);
+
+        seekbar.setProgress(MainActivity.currentProgress);
+        seekbar.setMax(currentDuration);
 
         audioBook = new Intent(this, AudiobookService.class);
         bindService(audioBook, sv, Context.BIND_AUTO_CREATE);
