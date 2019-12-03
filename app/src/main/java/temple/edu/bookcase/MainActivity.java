@@ -50,14 +50,22 @@ public class MainActivity extends AppCompatActivity
     EditText search;
     String searchText = "";
 
+    private static int currentDuration;
+    private static int currentProgress;
+
     Button button;
 
     // Audiobook vars
     Button playButton;
+    Button pauseButton;
+
     AudiobookService.MediaControlBinder servBinder;
     SeekBar seekbar;
     Boolean isConnected;
     Intent audioBook;
+
+    Boolean paused;
+    Boolean playing;
 
     Boolean isTitle = false;
     Boolean isAuthor = false;
@@ -69,6 +77,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d("did service", "service connected!");
             isConnected = true;
             servBinder = (AudiobookService.MediaControlBinder) service;
             servBinder.setProgressHandler(seekHandler);
@@ -77,36 +86,47 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            Log.d("did service", "service not connected");
+
             servBinder = null;
             isConnected = false;
 
         }
     };
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        unbindService(sv);
+    }
 
     Handler seekHandler = new Handler(new Handler.Callback(){
 
         @Override
         public boolean handleMessage(@NonNull Message msg) {
-
+        Log.d("bannan", "ban");
             if (msg.obj != null) {
                 seekbar = findViewById(R.id.seekBar);
 
                 if (seekbar != null) {
                     AudiobookService.BookProgress bookSeek = (AudiobookService.BookProgress)msg.obj;
+                    Log.d("hey", "Progress is: " + String.valueOf(bookSeek.getProgress()));
 
                     if(isConnected){
                         //servBinder.stop();
 
-
-                        if (seekbar != null){
-                            seekbar.setProgress(0);
+                        if (seekbar != null &&(bookSeek.getProgress() < MainActivity.currentDuration)){
+                            seekbar.setProgress(bookSeek.getProgress());
                             seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                                 @Override
                                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                                     if (fromUser && isConnected){
-                                        servBinder.seekTo(0);
 
+                                        servBinder.seekTo(progress);
+                                        currentProgress = progress;
+                                    }
+                                    else{
+                                        currentProgress = progress;
                                     }
                                 }
 
@@ -169,6 +189,7 @@ public class MainActivity extends AppCompatActivity
         title = findViewById(R.id.titleRadio);
         author = findViewById(R.id.author);
         seekbar = findViewById(R.id.seekBar);
+        pauseButton = findViewById(R.id.pauseButton);
 
         audioBook = new Intent(this, AudiobookService.class);
         bindService(audioBook, sv, Context.BIND_AUTO_CREATE);
@@ -234,20 +255,6 @@ public class MainActivity extends AppCompatActivity
         }
         changeFragments(bookNames);
 
-/*
-        if (playButton != null){
-            playButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AudiobookService s = new AudiobookService();
-
-
-                    Intent intent = new Intent(this, AudioBookService.class);
-                    bindService(intent, )
-                }
-        });
-        }
-*/
         // Search function
         if (button != null) {
             button.setOnClickListener(new View.OnClickListener() {
@@ -292,6 +299,22 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
+
+
+        pauseButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(isConnected && !paused){
+                    servBinder.pause();
+                    playing = false;
+                    paused = true;
+                } else if (isConnected) {
+                    servBinder.pause();
+                    playing = true;
+                    paused = false;
+                }
+            }
+        });
     }
 
         @Override
@@ -354,9 +377,16 @@ public class MainActivity extends AppCompatActivity
     public void playBook(Book book){
         startService(audioBook);
 
+        Log.d("did service", "banoo");
+
         if(isConnected){
             seekbar.setMax(book.getDuration());
+
+            Log.d("did services", String.valueOf(book.getId()));
             servBinder.play(book.getId());
+
+            playing = true;
+            paused = false;
         }
     }
 }
