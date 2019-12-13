@@ -21,13 +21,26 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="210dp" />
+        android:layout_height="157dp" />
 
     <Button
         android:id="@+id/playButton"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:text="Play" />
+
+    <Button
+        android:id="@+id/download"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Download"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/DeleteButton"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Delete" />
 
 
 </LinearLayout>

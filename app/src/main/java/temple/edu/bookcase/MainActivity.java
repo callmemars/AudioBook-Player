@@ -10,8 +10,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -21,22 +24,32 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
+
+import com.squareup.picasso.Downloader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import edu.temple.audiobookplayer.AudiobookService;
 
 public class MainActivity extends AppCompatActivity
-        implements BookListFragment.OnFragmentInteractionListener, BookDetailsFragment.OnBookPlay {
+        implements BookListFragment.OnFragmentInteractionListener, BookDetailsFragment.OnBookPlay, BookDetailsFragment.downloadBooks {
 
     FragmentManager fm;
     BookDetailsFragment fragdetail;
@@ -44,6 +57,8 @@ public class MainActivity extends AppCompatActivity
 
     ArrayList<Book> bookNames = new ArrayList<>();
     ArrayList<Book> searchNames = new ArrayList<>();
+
+    Book CurrentBook;
 
     ViewPagerFragment bf;
     Fragment frag;
@@ -55,9 +70,11 @@ public class MainActivity extends AppCompatActivity
 
     Button button;
 
-    // Audiobook vars
+    // Audio book vars
     Button pauseButton;
     Button stopButton;
+
+    File file;
 
     AudiobookService.MediaControlBinder servBinder;
     SeekBar seekbar;
@@ -87,7 +104,6 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onServiceDisconnected(ComponentName name) {
             Log.d("did service", "service not connected");
-
             servBinder = null;
             isConnected = false;
 
@@ -99,6 +115,7 @@ public class MainActivity extends AppCompatActivity
         unbindService(sv);
     }
 
+    // Seekbar management code
     Handler seekHandler = new Handler(new Handler.Callback(){
 
         @Override
@@ -189,11 +206,12 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //file = new File(getFilesDir(), CurrentBook.getTitle() + ".mp3");
+
         fm = getSupportFragmentManager();
 
         // Search Ids
         search = findViewById(R.id.searchText);
-
         button = findViewById((R.id.button));
         title = findViewById(R.id.titleRadio);
         author = findViewById(R.id.author);
@@ -214,6 +232,8 @@ public class MainActivity extends AppCompatActivity
         ViewPagerFragment vpFrag = null;
         BookListFragment bfFrag = null;
 
+
+        // Recover book objects from previous fragments
         if (f1 instanceof ViewPagerFragment) {
             vpFrag = (ViewPagerFragment) fm.findFragmentById(R.id.frag1);
             if (vpFrag != null) {
@@ -223,12 +243,11 @@ public class MainActivity extends AppCompatActivity
             bfFrag = (BookListFragment) fm.findFragmentById(R.id.frag1);
             if (bfFrag != null) {
                 bookNames = bfFrag.getCurrentList();
-
             }
-
         }
         // Check how many panes there are
          twoPane = (findViewById(R.id.frag2) != null);
+
 
 
         // Query code
@@ -382,6 +401,7 @@ public class MainActivity extends AppCompatActivity
                     break;
         }
     }
+
     public void changeFragments(ArrayList<Book> currentBook){
         frag = BookListFragment.newInstance(currentBook);
         fragdetail = new BookDetailsFragment();
@@ -406,18 +426,47 @@ public class MainActivity extends AppCompatActivity
     public void playBook(Book book){
         startService(audioBook);
 
+        CurrentBook = book;
+
         Log.d("did service", "banoo");
 
-        if(isConnected){
+        if(isConnected) {
             seekbar.setMax(book.getDuration());
-
             currentDuration = book.getDuration();
-
             Log.d("did services", String.valueOf(book.getId()));
             servBinder.play(book.getId());
-
             playing = true;
             paused = false;
         }
+
     }
-}
+
+    @Override
+    public void playBook(Book book, File mp3){
+        startService(audioBook);
+        //CurrentBook = book;
+
+        file = new File(getFilesDir(), book.getTitle() + ".mp3");
+
+        Log.d("playbook 2", "banoo");
+
+        if(isConnected) {
+            seekbar.setMax(book.getDuration());
+            currentDuration = book.getDuration();
+            Log.d("Playing from mp3", String.valueOf(book.getId()));
+            servBinder.play(mp3);
+            playing = true;
+            paused = false;
+        }
+
+    }
+
+
+    @Override
+    public void downloadBook(Book book) {
+
+        }
+
+    }
+
+
