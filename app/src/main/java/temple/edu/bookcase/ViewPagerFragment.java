@@ -9,30 +9,22 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ViewPagerFragment extends Fragment {
 
 
     ViewPager pager;
-    ArrayList<String> bookArrayList;
+    ArrayList<Book> bookArrayList = new ArrayList<Book>();
 
     public ViewPagerFragment() {
-        // Required empty public constructor
     }
 
 
-
-    public static ViewPagerFragment newInstance(ArrayList<String> bookListKey) {
+    public static ViewPagerFragment newInstance(ArrayList<Book> bookListKey) {
         ViewPagerFragment fragment = new ViewPagerFragment();
         Bundle args = new Bundle();
-        args.putStringArrayList("book_key", bookListKey);
+        args.putParcelableArrayList("book_key", bookListKey);
         fragment.setArguments(args);
 
         return fragment;
@@ -47,8 +39,10 @@ public class ViewPagerFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_blank, container, false);
         pager = (ViewPager) v.findViewById(R.id.pager);
 
+        if(pager.getAdapter() != null){
+            pager.getAdapter().notifyDataSetChanged();
+        }
         pager.setAdapter(buildAdapter());
-
         return v;
     }
 
@@ -56,13 +50,18 @@ public class ViewPagerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            bookArrayList = getArguments().getStringArrayList("book_key");
+            bookArrayList = getArguments().getParcelableArrayList("book_key");
         }
+    }
+
+    public ArrayList<Book> getCurrentList(){
+        return this.bookArrayList;
     }
 
     private PagerAdapter buildAdapter() {
         PagerAdapter p = new temple.edu.bookcase.PagerAdapter(getChildFragmentManager(), bookArrayList);
         return (p);
     }
+
 
 }
